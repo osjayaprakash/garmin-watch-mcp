@@ -1,0 +1,83 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.osjayaprakash/garmin-watch-mcp",
+  "title": "Garmin Watch (Garmin Connect)",
+  "description": "Read-only Garmin watch sleep, heart rate, stress, Body Battery, HRV and activities",
+  "websiteUrl": "https://garmin-watch-mcp.readthedocs.io",
+  "repository": {
+    "url": "https://github.com/osjayaprakash/garmin-watch-mcp",
+    "source": "github"
+  },
+  "version": "0.1.0",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "registryBaseUrl": "https://pypi.org",
+      "identifier": "garmin-watch-mcp",
+      "version": "0.1.0",
+      "runtimeHint": "uvx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "GARMIN_EMAIL",
+          "description": "Garmin Connect account email (not needed once tokens are saved)"
+        },
+        {
+          "name": "GARMIN_PASSWORD",
+          "description": "Garmin Connect account password (not needed once tokens are saved)",
+          "isSecret": true
+        },
+        {
+          "name": "GARMINTOKENS",
+          "description": "Directory holding saved tokens, or the token JSON itself (from `garmin-watch-mcp login --print-tokens`)",
+          "default": "~/.garminconnect",
+          "isSecret": true
+        },
+        {
+          "name": "GARMIN_IS_CN",
+          "description": "Set to true for Garmin Connect China (garmin.cn) accounts",
+          "default": "false",
+          "choices": [
+            "true",
+            "false"
+          ]
+        }
+      ]
+    },
+    {
+      "registryType": "oci",
+      "identifier": "ghcr.io/osjayaprakash/garmin-watch-mcp:0.1.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "GARMIN_EMAIL",
+          "description": "Garmin Connect account email (not needed once tokens are saved)"
+        },
+        {
+          "name": "GARMIN_PASSWORD",
+          "description": "Garmin Connect account password (not needed once tokens are saved)",
+          "isSecret": true
+        },
+        {
+          "name": "GARMINTOKENS",
+          "description": "Directory holding saved tokens, or the token JSON itself (from `garmin-watch-mcp login --print-tokens`)",
+          "default": "~/.garminconnect",
+          "isSecret": true
+        },
+        {
+          "name": "GARMIN_IS_CN",
+          "description": "Set to true for Garmin Connect China (garmin.cn) accounts",
+          "default": "false",
+          "choices": [
+            "true",
+            "false"
+          ]
+        }
+      ]
+    }
+  ]
+}

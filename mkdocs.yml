@@ -1,0 +1,21 @@
+site_name: garmin-watch-mcp
+site_description: MCP server exposing Garmin watch health and activity data from Garmin Connect
+repo_url: https://github.com/osjayaprakash/garmin-watch-mcp
+docs_dir: documentation
+
+theme:
+  name: material
+  features:
+    - content.code.copy
+
+nav:
+  - Home: index.md
+  - Installation: install.md
+
+markdown_extensions:
+  - admonition
+  - tables
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.snippets:
+      check_paths: true
