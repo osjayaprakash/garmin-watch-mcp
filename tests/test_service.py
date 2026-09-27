@@ -137,3 +137,23 @@ async def test_activity_id_must_be_numeric(service, client):
         await service.activity("abc")
     await service.activity(" 111 ")
     assert ("activity", "111") in client.calls
+
+
+async def test_mfa_failure_is_not_retried(service, client):
+    client.fail_next["authenticate"] = [MFARequiredError("login")]
+    for _ in range(3):
+        with pytest.raises(ToolError, match="garmin-watch-mcp login"):
+            await service.devices()
+    assert client.count("authenticate") == 1
+    assert client.count("devices") == 0
+
+
+async def test_mfa_after_expired_token_is_not_retried(service, client):
+    await service.devices()
+    client.fail_next["devices"] = [AuthenticationError("devices")]
+    client.fail_next["authenticate"] = [MFARequiredError("login")]
+    with pytest.raises(ToolError, match="uses MFA"):
+        await service.devices()
+    with pytest.raises(ToolError, match="uses MFA"):
+        await service.sleep(None)
+    assert client.count("authenticate") == 2

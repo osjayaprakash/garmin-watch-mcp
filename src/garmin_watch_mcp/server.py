@@ -67,8 +67,9 @@ async def get_daily_summary(date: DateArg = None) -> dict[str, Any]:
 @mcp.tool(annotations=_READ_ONLY)
 @tracing.traced("get_sleep")
 async def get_sleep(date: DateArg = None) -> dict[str, Any]:
-    """Sleep for the night ending on `date`: stages (seconds), sleep score, start/end (UTC),
-    overnight HRV, resting heart rate and Body Battery change."""
+    """Sleep for the night that ended on the morning of `date` (Garmin files each night under
+    the day you woke up, so "last night" is today): stages (seconds), sleep score, start/end
+    (UTC), overnight HRV, resting heart rate and Body Battery change."""
     day, raw = await _get_service().sleep(date)
     return formatting.sleep(day, raw)
 

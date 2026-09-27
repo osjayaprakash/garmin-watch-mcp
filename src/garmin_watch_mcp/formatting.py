@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from collections import defaultdict
 from collections.abc import Iterable, Mapping, Sequence
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime, timedelta
 from typing import Any
 
 _SUMMARY_FIELDS = (
@@ -164,7 +164,13 @@ def daily_summary(day: str, raw: Mapping[str, Any]) -> dict[str, Any]:
 
 def sleep(day: str, raw: Mapping[str, Any]) -> dict[str, Any]:
     dto = raw.get("dailySleepDTO") or {}
-    result: dict[str, Any] = {"date": day, **pick(dto, _SLEEP_FIELDS)}
+    night_of = (date.fromisoformat(day) - timedelta(days=1)).isoformat()
+    result: dict[str, Any] = {
+        "date": day,
+        "woke_on": day,
+        "night_of": night_of,
+        **pick(dto, _SLEEP_FIELDS),
+    }
     if not dto.get("sleepTimeSeconds"):
         result["no_data"] = True
     for key, name in (("sleepStartTimestampGMT", "start_utc"), ("sleepEndTimestampGMT", "end_utc")):

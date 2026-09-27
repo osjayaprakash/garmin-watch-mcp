@@ -18,6 +18,7 @@ def test_daily_summary_keeps_curated_fields_only():
 def test_sleep_flattens_dto_and_scores():
     result = formatting.sleep("2026-09-26", samples.SLEEP)
     assert result["sleepTimeSeconds"] == 26400
+    assert (result["woke_on"], result["night_of"]) == ("2026-09-26", "2026-09-25")
     assert result["sleep_score"] == 82
     assert result["start_utc"] == "2026-09-25T23:00:00+00:00"
     assert result["end_utc"] == "2026-09-26T07:00:00+00:00"

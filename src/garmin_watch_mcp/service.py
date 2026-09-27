@@ -99,6 +99,9 @@ class HealthService:
         self._today = today
         self._auth_lock = asyncio.Lock()
         self._authenticated = False
+        # Set once login needs an MFA code. Retrying would only re-trigger Garmin's MFA
+        # (a new code each time) and its login rate limit, so fail fast until restart.
+        self._mfa_required = False
 
     def day(self, value: str | None) -> str:
         return parse_day(value, self._today()).isoformat()
@@ -163,8 +166,14 @@ class HealthService:
         async with self._auth_lock:
             if self._authenticated and not force:
                 return
+            if self._mfa_required:
+                raise MFARequiredError("login")
             self._authenticated = False
-            await self._client.authenticate()
+            try:
+                await self._client.authenticate()
+            except MFARequiredError:
+                self._mfa_required = True
+                raise
             self._authenticated = True
 
     async def _request(self, method: str, fn: Callable[..., Awaitable[T]], *args: Any) -> T:
